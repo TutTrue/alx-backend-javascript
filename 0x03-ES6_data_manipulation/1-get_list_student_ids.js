@@ -1,6 +1,6 @@
 export default function getListStudentIds(listStudent) {
   const keys = [];
-  if (typeof listStudent !== 'object') return keys;
+  if (!Array.isArray(listStudent)) return keys;
   listStudent.forEach((student) => {
     keys.push(student.id);
   });
