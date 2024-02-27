@@ -12,7 +12,7 @@ app.get('/students', (req, res) => {
     .then((data) => {
       studentsData += data;
       res.setHeader('Content-Type', 'text/plain');
-      res.end(studentsData);
+      return res.send(studentsData);
     })
     .catch(() => {
       res.setHeader('Content-Type', 'text/plain');
