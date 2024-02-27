@@ -13,24 +13,27 @@ function countStudents(path) {
 
   const firstnameIndex = data[0].split(',').indexOf('firstname');
   const fieldIndex = data[0].split(',').indexOf('field');
-  for (let i = 1; i < data.length; i++) {
-    if (data[i] === '') continue;
-    count++;
-    const row = data[i].split(',');
-    if (fields[row[fieldIndex]]) {
-      fields[row[fieldIndex]].push(row[firstnameIndex]);
-    } else {
-      fields[row[fieldIndex]] = [row[firstnameIndex]];
+  for (let i = 1; i < data.length; i += 1) {
+    if (data[i] !== '') {
+      count += 1;
+      const row = data[i].split(',');
+      if (fields[row[fieldIndex]]) {
+        fields[row[fieldIndex]].push(row[firstnameIndex]);
+      } else {
+        fields[row[fieldIndex]] = [row[firstnameIndex]];
+      }
     }
   }
   console.log(`Number of students: ${count}`);
 
   for (const field in fields) {
-    console.log(
-      `Number of students in ${field}: ${fields[field].length}. List: ${fields[
-        field
-      ].join(', ')}`
-    );
+    if (field) {
+      console.log(
+        `Number of students in ${field}: ${
+          fields[field].length
+        }. List: ${fields[field].join(', ')}`,
+      );
+    }
   }
 }
 
