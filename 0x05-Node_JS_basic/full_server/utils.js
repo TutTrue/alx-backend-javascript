@@ -1,35 +1,34 @@
-import fs from 'fs';
+import { readFile } from 'fs';
 
-function readDatabase() {
+async function readDatabase(path) {
   return new Promise((resolve, reject) => {
-    fs.readFile(process.argv[2], 'utf8', (error, data) => {
+    // eslint-disable-next-line consistent-return
+    readFile(path, (error, dataBuffer) => {
       if (error) {
-        reject(Error('Cannot load the database'));
-      } else {
-        const fields = {};
-        const students = data.split('\n');
-        console.log(`Number of students: ${students.length - 1}`);
-        students.forEach((student) => {
-          const studentData = student.split(',');
-          if (fields[studentData[3]]) {
-            fields[studentData[3]].push(studentData[0]);
-          } else {
-            fields[studentData[3]] = [studentData[0]];
-          }
-        });
-        delete fields.field;
-        for (const field in fields) {
-          if (field) {
-            console.log(
-              `Number of students in ${field}: ${
-                fields[field].length
-              }. List: ${fields[field].join(', ')}`,
-            );
-          }
-        }
-        resolve();
+        return reject();
       }
+      const data = dataBuffer.toString().split('\n');
+      const fields = {};
+
+      const firstnameIndex = data[0].split(',').indexOf('firstname');
+      const fieldIndex = data[0].split(',').indexOf('field');
+      // eslint-disable-next-line no-plusplus
+      for (let i = 1; i < data.length; i++) {
+        // eslint-disable-next-line no-continue
+        if (data[i] === '') continue;
+        // eslint-disable-next-line no-plusplus
+        const row = data[i].split(',');
+        if (fields[row[fieldIndex]]) {
+          fields[row[fieldIndex]].push(row[firstnameIndex]);
+        } else {
+          fields[row[fieldIndex]] = [row[firstnameIndex]];
+        }
+      }
+
+      resolve(fields);
     });
+  }).catch(() => {
+    throw new Error('Cannot load the database');
   });
 }
 
