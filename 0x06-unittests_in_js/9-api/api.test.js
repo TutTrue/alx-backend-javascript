@@ -23,6 +23,13 @@ describe('GET /cart/:id', () => {
   });
 
   it('should return a string', (done) => {
+    request.get('http://localhost:7865/cart/12', (err, res, body) => {
+      expect(body).to.be.equal('Payment methods for cart 12');
+      done();
+    });
+  });
+
+  it('should return a string', (done) => {
     request.get('http://localhost:7865/cart/TutTrue', (err, res, body) => {
       if (err) throw err;
       expect(res.statusCode).to.be.equal(404);
